@@ -412,6 +412,7 @@ static void handleInstInstalledFile(const rpmts ts, rpmte p, rpmfiles fi, int fx
 
     if (rpmfilesCompare(otherFi, ofx, fi, fx)) {
 	int rConflicts = 1;
+	int cConflicts;
 	char rState = RPMFILE_STATE_REPLACED;
 
 	/*
@@ -430,10 +431,12 @@ static void handleInstInstalledFile(const rpmts ts, rpmte p, rpmfiles fi, int fx
 	    }
 	}
 
+	/* If enabled, resolve colored conflicts to preferred type */
+	cConflicts = handleColorConflict(ts, fs, fi, fx,
+					 NULL, otherFi, ofx);
+
 	if (rConflicts) {
-	    /* If enabled, resolve colored conflicts to preferred type */
-	    rConflicts = handleColorConflict(ts, fs, fi, fx,
-					     NULL, otherFi, ofx);
+	    rConflicts = cConflicts;
 	    /* If resolved, we need to adjust in-rpmdb state too */
 	    if (rConflicts == 0 && rpmfsGetAction(fs, fx) == FA_CREATE)
 		rState = RPMFILE_STATE_WRONGCOLOR;

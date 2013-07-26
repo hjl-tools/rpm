@@ -86,7 +86,8 @@ static std::string mkmarker(GElf_Ehdr *ehdr)
 	    marker = "(64bit)";
 	    break;
 	}
-    }
+    } else if (ehdr->e_machine == EM_X86_64)
+	marker = "(x32bit)";
     return marker;
 }
 
