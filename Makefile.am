@@ -197,7 +197,8 @@ EXTRA_DIST += rpmrc.in
 
 noinst_DATA = macros
 macros: $(top_srcdir)/macros.in
-	  ( cd $(top_builddir) && ./config.status --file=${subdir}/macros:${subdir}/macros.in )
+	  ( cd $(top_builddir) && ./config.status --file=${subdir}/macros:${subdir}/macros.in \
+	    && $(SED) -i -e "s,/usr/local/bin/,,g" ${subdir}/macros)
 CLEANFILES += macros
 EXTRA_DIST += macros.in
 
